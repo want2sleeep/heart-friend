@@ -7,6 +7,7 @@ import { useMoodAnalytics } from '../hooks/useMoodAnalytics';
 import { useMoodNotification } from '../hooks/useMoodNotification';
 import { MainCharacter } from './MainCharacter';
 import { MOOD_CONFIG } from '../config/moodConfig';
+import AiChatWidget from './xinghuo';
 
 // Inline SVGs for icons
 const PlugIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg>;
@@ -126,7 +127,7 @@ export const HomePage: React.FC = () => {
       </div>
 
       {/* 右上角：设置按钮和对话入口按钮 */}
-      <div className="absolute top-4 right-4 z-50 flex gap-2">
+      <div className="absolute top-4 right-4 z-50 flex gap-2 items-center">
         {/* API 设置按钮 */}
         <button
           onClick={() => setShowApiSettings(true)}
@@ -134,7 +135,8 @@ export const HomePage: React.FC = () => {
         >
           <SettingsIcon />
         </button>
-        
+        {/* 讯飞 AI 助手按钮 */}
+        <AiChatWidget />
         {/* 对话入口按钮 */}
         <button
           onClick={handleChatClick}
@@ -347,6 +349,7 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };

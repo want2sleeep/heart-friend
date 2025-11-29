@@ -1,0 +1,5 @@
+{
+  "name": "Bio-Feedback AI Companion",
+  "description": "A React application that interprets GSR sensor data via Web Serial API to adjust an AI avatar's mood and system prompting in real-time.",
+  "requestFramePermissions": []
+}

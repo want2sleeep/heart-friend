@@ -114,14 +114,18 @@ export const HomePage: React.FC = () => {
         {notificationPermission === 'default' && (
           <button
             onClick={requestNotificationPermission}
-            className="flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all shadow-lg backdrop-blur-md border bg-rose-50 border-rose-300 text-rose-700 hover:bg-rose-100"
+            className="flex items-center justify-center px-4 py-2 rounded-full font-medium text-sm transition-all shadow-lg backdrop-blur-md border bg-rose-50 border-rose-300 text-rose-700 hover:bg-rose-100"
+            title="启用通知提醒"
           >
-            🔔 启用通知提醒
+            🔔
           </button>
         )}
         {notificationPermission === 'denied' && (
-          <div className="flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm shadow-lg backdrop-blur-md border bg-gray-100 border-gray-300 text-gray-600">
-            🔕 通知已禁用
+          <div 
+            className="flex items-center justify-center px-4 py-2 rounded-full font-medium text-sm shadow-lg backdrop-blur-md border bg-gray-100 border-gray-300 text-gray-600"
+            title="通知已禁用"
+          >
+            🔕
           </div>
         )}
       </div>

@@ -5,6 +5,7 @@ import { useMoodProcessor } from './hooks/useMoodProcessor';
 import { HomePage } from './components/HomePage';
 import { ChatInterface } from './components/ChatInterface';
 import { MoodAnalyticsDetail } from './components/MoodAnalyticsDetail';
+import AnimalPlaza from './components/AnimalPlaza';
 
 // Home icon SVG
 const HomeIcon = () => (
@@ -71,6 +72,7 @@ const App: React.FC = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/analytics" element={<MoodAnalyticsDetail />} />
+        <Route path="/plaza" element={<AnimalPlaza />} />
       </Routes>
     </BrowserRouter>
   );

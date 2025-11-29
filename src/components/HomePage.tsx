@@ -107,7 +107,6 @@ export const HomePage: React.FC = () => {
           }`}
         >
           {isConnected ? <CheckIcon /> : <PlugIcon />}
-          {isConnected ? '正在采集' : '开始采集'}
         </button>
 
         {/* 通知权限提示 */}
@@ -141,6 +140,16 @@ export const HomePage: React.FC = () => {
         </button>
         {/* 讯飞 AI 助手按钮 */}
         <AiChatWidget />
+        {/* 动物广场入口按钮 */}
+        <motion.button
+          onClick={() => navigate('/plaza')}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          className="flex items-center justify-center px-4 py-2 rounded-full bg-white/80 hover:bg-white transition-all shadow-lg backdrop-blur-md border border-slate-300"
+          title="动物广场"
+        >
+          <img src="/plaza.png" alt="动物广场" className="w-5 h-5" />
+        </motion.button>
         {/* 对话入口按钮 */}
         <button
           onClick={handleChatClick}

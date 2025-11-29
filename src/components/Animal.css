@@ -1,0 +1,44 @@
+/* Animal Component Styles */
+/* Requirements: 2.2 (smooth animation), 2.4 (direction facing), 5.2 (shadow effect) */
+
+.animal {
+  position: absolute;
+  font-size: 3rem;
+  cursor: default;
+  user-select: none;
+  z-index: 1;
+  /* Shadow effect for grounded appearance - Requirements 5.2 */
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+}
+
+/* Smooth movement transition - Requirements 2.2 */
+.animal--moving {
+  transition-property: left, top;
+  transition-timing-function: ease-in-out;
+}
+
+/* Direction flip transition - Requirements 2.4 */
+.animal--idle {
+  transition: transform 0.2s ease;
+}
+
+/* Facing left (flipped horizontally) - Requirements 2.4 */
+.animal--facing-left {
+  transform: translate(-50%, -50%) scaleX(-1);
+}
+
+/* Facing right (default) - Requirements 2.4 */
+.animal--facing-right {
+  transform: translate(-50%, -50%) scaleX(1);
+}
+
+/* Hover effect for interactivity */
+.animal:hover {
+  filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.25));
+}
+
+/* Animal emoji wrapper */
+.animal__sprite {
+  display: inline-block;
+  line-height: 1;
+}

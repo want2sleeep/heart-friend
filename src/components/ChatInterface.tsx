@@ -141,9 +141,9 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
           <Bot size={20} />
         </div>
         <div className="flex-1">
-          <h3 className="font-semibold text-lg">AI Companion</h3>
+          <h3 className="font-semibold text-lg">心伴对话</h3>
           <p className={`text-xs font-medium uppercase ${currentMood.accentColor.replace('text-', 'text-opacity-80 text-')}`}>
-            Mode: {currentMood.label}
+            {currentMood.label}
           </p>
         </div>
         

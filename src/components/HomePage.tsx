@@ -44,7 +44,7 @@ export const HomePage: React.FC = () => {
   // Requirement 1.1, 2.1: 图片预加载逻辑
   useEffect(() => {
     const preloadImages = () => {
-      const images = ['/main.png', '/star.png'];
+      const images = ['/main.png'];
       
       images.forEach((src) => {
         const img = new Image();

@@ -109,6 +109,9 @@ export function useChatAPI(systemPrompt: string): UseChatAPIReturn {
         },
       ];
 
+      // Reload config from localStorage before each request
+      openAIService.reloadConfig();
+      
       // Call OpenAI API
       const responseContent = await openAIService.sendChatCompletion(apiMessages);
 

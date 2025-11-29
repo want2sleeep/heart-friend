@@ -12,20 +12,37 @@ export class OpenAIService {
   }
 
   /**
-   * Load configuration from environment variables with fallback to defaults
+   * Load configuration from localStorage, then environment variables, with fallback to defaults
    * Validates: Requirements 1.1, 1.2
    */
   private loadConfig(overrides?: Partial<OpenAIConfig>): OpenAIConfig {
-    const apiKey = overrides?.apiKey || import.meta.env.VITE_OPENAI_API_KEY || 'your_api_key_here';
-    const baseURL = overrides?.baseURL || import.meta.env.VITE_OPENAI_BASE_URL || 'https://api.openai.com/v1';
-    const model = overrides?.model || import.meta.env.VITE_OPENAI_MODEL || 'gpt-3.5-turbo';
+    // Priority: overrides > localStorage > env > defaults
+    const apiKey = overrides?.apiKey 
+      || localStorage.getItem('openai_api_key') 
+      || import.meta.env.VITE_OPENAI_API_KEY 
+      || 'your_api_key_here';
+    const baseURL = overrides?.baseURL 
+      || localStorage.getItem('openai_base_url') 
+      || import.meta.env.VITE_OPENAI_BASE_URL 
+      || 'https://api.openai.com/v1';
+    const model = overrides?.model 
+      || localStorage.getItem('openai_model_name') 
+      || import.meta.env.VITE_OPENAI_MODEL 
+      || 'gpt-3.5-turbo';
 
     // Warn if using default placeholder values
     if (apiKey === 'your_api_key_here') {
-      console.warn('[OpenAI Service] Using placeholder API key. Please configure VITE_OPENAI_API_KEY in .env.local');
+      console.warn('[OpenAI Service] Using placeholder API key. Please configure via settings or VITE_OPENAI_API_KEY in .env.local');
     }
 
     return { apiKey, baseURL, model };
+  }
+
+  /**
+   * Reload configuration from localStorage
+   */
+  reloadConfig(): void {
+    this.config = this.loadConfig();
   }
 
   /**

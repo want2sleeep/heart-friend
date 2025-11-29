@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useSerialPort } from '../hooks/useSerialPort';
@@ -12,6 +12,7 @@ import { MOOD_CONFIG } from '../config/moodConfig';
 const PlugIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></svg>;
 const CheckIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>;
 const ChatIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>;
+const SettingsIcon = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>;
 
 /**
  * HomePage Component
@@ -33,6 +34,20 @@ export const HomePage: React.FC = () => {
   const { currentMood, smoothedValue } = useMoodProcessor(latestValue);
   const { dailyStats, clearAllData } = useMoodAnalytics(currentMood, smoothedValue);
   const { notificationPermission } = useMoodNotification(currentMood.id);
+
+  // API 设置状态
+  const [showApiSettings, setShowApiSettings] = useState(false);
+  const [apiKey, setApiKey] = useState(() => localStorage.getItem('openai_api_key') || '');
+  const [baseUrl, setBaseUrl] = useState(() => localStorage.getItem('openai_base_url') || '');
+  const [modelName, setModelName] = useState(() => localStorage.getItem('openai_model_name') || '');
+
+  // 保存 API 设置
+  const handleSaveApiSettings = () => {
+    localStorage.setItem('openai_api_key', apiKey);
+    localStorage.setItem('openai_base_url', baseUrl);
+    localStorage.setItem('openai_model_name', modelName);
+    setShowApiSettings(false);
+  };
 
   // 请求通知权限
   const requestNotificationPermission = async () => {
@@ -106,16 +121,92 @@ export const HomePage: React.FC = () => {
         )}
       </div>
 
-      {/* 右上角：对话入口按钮 */}
-      <div className="absolute top-4 right-4 z-50">
+      {/* 右上角：设置按钮和对话入口按钮 */}
+      <div className="absolute top-4 right-4 z-50 flex gap-2">
+        {/* API 设置按钮 */}
+        <button
+          onClick={() => setShowApiSettings(true)}
+          className="flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all shadow-lg backdrop-blur-md border bg-white/80 border-slate-300 text-slate-700 hover:bg-white"
+        >
+          <SettingsIcon />
+        </button>
+        
+        {/* 对话入口按钮 */}
         <button
           onClick={handleChatClick}
           className="flex items-center gap-2 px-4 py-2 rounded-full font-medium text-sm transition-all shadow-lg backdrop-blur-md border bg-indigo-500 border-indigo-600 text-white hover:bg-indigo-600"
         >
           <ChatIcon />
-          对话
         </button>
       </div>
+
+      {/* API 设置模态框 */}
+      {showApiSettings && (
+        <div 
+          className="fixed inset-0 bg-black/30 flex items-center justify-center z-[100]"
+          onClick={() => setShowApiSettings(false)}
+        >
+          <div 
+            className="w-80 bg-white rounded-xl shadow-2xl border border-slate-200 p-5"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <p className="text-sm text-slate-600 font-medium">测试用，OpenAI Compatible</p>
+              <button 
+                onClick={() => setShowApiSettings(false)}
+                className="text-slate-400 hover:text-slate-600"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-1">API Key</label>
+                <input
+                  type="text"
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  placeholder="sk-e6ba13d31174ca2d7b0610ccf95fddbf"
+                  autoComplete="off"
+                  className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-slate-800"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-1">Base URL</label>
+                <input
+                  type="text"
+                  value={baseUrl}
+                  onChange={(e) => setBaseUrl(e.target.value)}
+                  placeholder="https://apis.iflow.cn/v1"
+                  autoComplete="off"
+                  className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-slate-800"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-xs font-medium text-slate-600 mb-1">Model Name</label>
+                <input
+                  type="text"
+                  value={modelName}
+                  onChange={(e) => setModelName(e.target.value)}
+                  placeholder="kimi-k2-0905"
+                  autoComplete="off"
+                  className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-slate-800"
+                />
+              </div>
+              
+              <button
+                onClick={handleSaveApiSettings}
+                className="w-full py-2 bg-indigo-500 text-white text-sm font-medium rounded-lg hover:bg-indigo-600 transition-colors"
+              >
+                保存
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Requirement 1.1, 1.2: Main character image - 可点击进入对话 */}
       <div onClick={handleCharacterClick} className="cursor-pointer mt-2">

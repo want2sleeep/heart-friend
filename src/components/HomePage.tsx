@@ -35,7 +35,11 @@ export const HomePage: React.FC = () => {
   const { dailyStats, clearAllData } = useMoodAnalytics(currentMood, smoothedValue);
   const { notificationPermission } = useMoodNotification(currentMood.id);
 
-  // API 设置状态
+  // API 设置状态 - 从环境变量获取默认值作为 placeholder
+  const envApiKey = import.meta.env.VITE_OPENAI_API_KEY || '';
+  const envBaseUrl = import.meta.env.VITE_OPENAI_BASE_URL || 'https://api.openai.com/v1';
+  const envModelName = import.meta.env.VITE_OPENAI_MODEL || 'gpt-3.5-turbo';
+  
   const [showApiSettings, setShowApiSettings] = useState(false);
   const [apiKey, setApiKey] = useState(() => localStorage.getItem('openai_api_key') || '');
   const [baseUrl, setBaseUrl] = useState(() => localStorage.getItem('openai_base_url') || '');
@@ -167,7 +171,7 @@ export const HomePage: React.FC = () => {
                   type="text"
                   value={apiKey}
                   onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="sk-e6ba13d31174ca2d7b0610ccf95fddbf"
+                  placeholder={envApiKey || '...'}
                   autoComplete="off"
                   className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-slate-800"
                 />
@@ -179,7 +183,7 @@ export const HomePage: React.FC = () => {
                   type="text"
                   value={baseUrl}
                   onChange={(e) => setBaseUrl(e.target.value)}
-                  placeholder="https://apis.iflow.cn/v1"
+                  placeholder={envBaseUrl}
                   autoComplete="off"
                   className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-slate-800"
                 />
@@ -191,7 +195,7 @@ export const HomePage: React.FC = () => {
                   type="text"
                   value={modelName}
                   onChange={(e) => setModelName(e.target.value)}
-                  placeholder="kimi-k2-0905"
+                  placeholder={envModelName}
                   autoComplete="off"
                   className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-slate-800"
                 />
